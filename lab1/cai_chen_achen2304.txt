@@ -1,0 +1,132 @@
+Name: Cai Chen
+NetID: achen2304@iastate.edu
+
+==============================================================
+PROGRAM 1: findLast
+==============================================================
+Given failing test: x = [2, 3, 5], y = 2; Expected = 0, Actual = -1
+
+(a) The fault is the loop condition: "i > 0" should be "i >= 0".
+    The loop starts at the last index and decrements, but stops before
+    reaching index 0. This means the element at index 0 is never checked.
+    Fix: change  "for (int i = x.length-1; i > 0; i--)"
+    to          "for (int i = x.length-1; i >= 0; i--)"
+
+(b) Test case that does NOT execute the fault:
+    x = [2, 3, 5], y = 5  -->  Expected = 2
+    The element 5 is found at index 2 on the first iteration. The loop
+    returns immediately and never reaches the condition check at i = 0,
+    so the faulty condition is never exercised.
+
+(c) Test case that executes the fault but does NOT result in an error state:
+    x = [2, 3, 5], y = 6  -->  Expected = -1
+    The element 6 is not in the array. The loop runs through i = 2, 1, then
+    at i = 0 the condition "i > 0" is false and the loop exits. Because
+    x[0] != 6, skipping index 0 does not affect the result; -1 is still correct.
+
+(d) Test case that results in an error state but NOT a failure:
+    Not possible. Whenever the fault creates an error state (y exists only at
+    index 0 and is skipped), the incorrect return value -1 is directly
+    observable to the caller instead of the correct index 0. The error always
+    propagates to a failure.
+
+(e) Fix: changed "i > 0" to "i >= 0".
+    Running the given test x = [2, 3, 5], y = 2 now correctly returns 0.
+
+==============================================================
+PROGRAM 2: lastZero
+==============================================================
+Given failing test: x = [0, 1, 0]; Expected = 2, Actual = 0
+
+(a) The fault is the loop direction. The loop iterates forward from index 0
+    to x.length-1, so it returns the FIRST zero found, not the LAST.
+    Fix: change  "for (int i = 0; i < x.length; i++)"
+    to          "for (int i = x.length-1; i >= 0; i--)"
+
+(b) Test case that does NOT execute the fault:
+    Not possible. Every call to lastZero executes the for loop, and the loop
+    always iterates in the wrong (forward) direction. There is no input that
+    causes the method to return a result without running the faulty loop.
+
+(c) Test case that executes the fault but does NOT result in an error state:
+    x = [1, 2, 0]  -->  Expected = 2
+    There is only one zero and it is at the last index. Both forward and
+    backward iteration will find it at index 2, so the faulty direction does
+    not change the result. The fault executes but no erroneous state occurs.
+
+(d) Test case that results in an error state but NOT a failure:
+    x = [0, 1, 2]  -->  Expected = 0
+    There is only one zero, at index 0. Forward search returns 0 immediately.
+    Backward search would check indices 2, 1, then 0 before returning 0.
+    The program counter follows a different (wrong) execution path than the
+    correct version, which is an error state, but the returned value 0 is
+    still correct, so it is not a failure.
+
+(e) Fix: reversed the loop to iterate from x.length-1 down to 0.
+    Running the given test x = [0, 1, 0] now correctly returns 2.
+
+==============================================================
+PROGRAM 3: countPositive
+==============================================================
+Given failing test: x = [-4, 2, 0, 2]; Expected = 2, Actual = 3
+
+(a) The fault is the comparison operator: ">= 0" should be "> 0".
+    Zero is not a positive number, but the faulty condition counts it as one.
+    Fix: change  "if (x[i] >= 0)"
+    to          "if (x[i] > 0)"
+
+(b) Test case that does NOT execute the fault:
+    x = [-4, 2, 3, 2]  -->  Expected = 3
+    The array contains no zeros, so the faulty condition ">= 0" and the
+    correct "> 0" behave identically for every element. The fault line is
+    reached for each element but never produces a different outcome.
+
+(c) Test case that executes the fault but does NOT result in an error state:
+    x = [-3, -1, -4]  -->  Expected = 0
+    All elements are negative, so both ">= 0" and "> 0" evaluate to false
+    for every element. The fault executes on each iteration but never changes
+    the count, so no error state results.
+
+(d) Test case that results in an error state but NOT a failure:
+    Not possible. Any time a zero is present, the faulty condition incorrectly
+    increments count by 1 relative to the correct behavior. That extra
+    increment is always visible in the returned count, so every error state
+    propagates directly to a failure.
+
+(e) Fix: changed ">= 0" to "> 0".
+    Running the given test x = [-4, 2, 0, 2] now correctly returns 2.
+
+==============================================================
+PROGRAM 4: oddOrPos (AddOrPos)
+==============================================================
+Given failing test: x = [-3, -2, 0, 1, 4]; Expected = 3, Actual = 2
+
+(a) The fault is the odd-number check: "x[i] % 2 == 1" should be "x[i] % 2 != 0".
+    In Java, the % operator preserves the sign of the dividend, so for a
+    negative odd number like -3, the result is -1, not 1. The condition
+    "x[i] % 2 == 1" is therefore never true for negative odd numbers,
+    causing them to be incorrectly excluded.
+    Fix: change  "if (x[i] % 2 == 1 || x[i] > 0)"
+    to          "if (x[i] % 2 != 0 || x[i] > 0)"
+
+(b) Test case that does NOT execute the fault:
+    x = [2, 4, 6, -2]  -->  Expected = 3
+    The array contains no negative odd numbers. For all elements the
+    condition "x[i] % 2 == 1" evaluates the same as "x[i] % 2 != 0"
+    (both false for even numbers), so the faulty sub-expression never
+    causes a different result.
+
+(c) Test case that executes the fault but does NOT result in an error state:
+    x = [1, 2, 3]  -->  Expected = 3
+    All elements are positive, so x[i] > 0 is true for all of them.
+    The faulty odd-check "x[i] % 2 == 1" is evaluated but the overall
+    condition is short-circuit true regardless. No element is miscounted.
+
+(d) Test case that results in an error state but NOT a failure:
+    Not possible. Any negative odd number causes x[i] % 2 to equal -1.
+    The faulty condition evaluates to false and the element is not counted,
+    directly producing a count that is too low. The error always propagates
+    to a failure.
+
+(e) Fix: changed "x[i] % 2 == 1" to "x[i] % 2 != 0".
+    Running the given test x = [-3, -2, 0, 1, 4] now correctly returns 3.
