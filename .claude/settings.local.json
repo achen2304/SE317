@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(javac \"bubble sort/BubbleSortFaulty.java\")",
+      "Bash(javac \"bubble sort/BubbleSortFixed.java\")",
+      "Bash(javac \"quick sort/QuickSortFaulty.java\")",
+      "Bash(javac \"quick sort/QuickSortFixed.java\")",
+      "Bash(javac \"merge sort/MergeSortFaulty.java\")"
     ]
   }
 }

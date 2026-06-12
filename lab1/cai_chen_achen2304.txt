@@ -24,10 +24,10 @@ Failing Test: x = [2, 3, 5], y = 2 | Expected: 0 | Actual: -1
 
 Failing Test: x = [0, 1, 0] | Expected: 2 | Actual: 0
 
-(a) What's wrong & the fix: The loop looks forward (from left to right) instead of backward. This means it returns the first zero it sees, not the last one.
+(a) What's wrong & the fix: The loop looks forward (from left to right) instead of backward. This means it returns the first zero it sees, Not the last one.
     Fix: Change the loop to start at x.length - 1 and decrement (i--) down to 0.
 
-(b) Skip the fault entirely: Not possible. Every time you call this method, the loop automatically runs in the wrong direction. You cannot avoid running the faulty code.
+(b) Skip the fault entirely: Not possible. Every time you call this method, the loop automatically runs in the wrong direction. You canNot avoid running the faulty code.
 
 (c) Run the fault, but get the right answer: x = [1, 2, 0]. There is only one zero, and it is at the very end. Whether you search forward or backward, you will find it at index 2, so the final answer is correct.
 
@@ -41,7 +41,7 @@ Failing Test: x = [0, 1, 0] | Expected: 2 | Actual: 0
 
 Failing Test: x = [-4, 2, 0, 2] | Expected: 2 | Actual: 3
 
-(a) What's wrong & the fix: The code treats 0 as a positive number because it uses >= 0. Zero is not positive.
+(a) What's wrong & the fix: The code treats 0 as a positive number because it uses >= 0. Zero is Not positive.
     Fix: Change if (x[i] >= 0) to if (x[i] > 0).
 
 (b) Skip the fault entirely: x = [-4, 2, 3, 2]. There are no zeros in this array. Because there are no zeros to trigger the broken >= logic, the code behaves exactly as it should.
@@ -58,7 +58,7 @@ Failing Test: x = [-4, 2, 0, 2] | Expected: 2 | Actual: 3
 
 Failing Test: x = [-3, -2, 0, 1, 4] | Expected: 3 | Actual: 2
 
-(a) What's wrong & the fix: The code checks for odd numbers using % 2 == 1. In Java, doing % 2 on a negative odd number (like -3) results in -1, not 1. This means the code completely ignores negative odd numbers.
+(a) What's wrong & the fix: The code checks for odd numbers using % 2 == 1. In Java, doing % 2 on a negative odd number (like -3) results in -1, Not 1. This means the code completely ignores negative odd numbers.
     Fix: Change x[i] % 2 == 1 to x[i] % 2 != 0.
 
 (b) Skip the fault entirely: x = [2, 4, 6, -2]. There are no negative odd numbers in this array. Without them, the broken math is never exposed, and the code acts perfectly.
